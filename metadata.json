@@ -1,0 +1,6 @@
+{
+  "name": "Sigma Dialer Onboarding Form",
+  "description": "A single-page business registration and agent onboarding form matching the Sigma Dialer branding, featuring real-time IP-based country selection, full zod validation, and persistent MongoDB storage.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
