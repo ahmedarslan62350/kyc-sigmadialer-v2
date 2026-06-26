@@ -14,74 +14,7 @@ interface AdminPanelProps {
 export default function AdminPanel({ refreshTrigger, theme = "light" }: AdminPanelProps) {
   const [dbStatus, setDbStatus] = useState<any>(null);
   const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
-  const [submissions, setSubmissions] = useState<any[]>([
-    {
-      _id: "674f1a2b3c4d5e6f7890ghij",
-      firstName: "John",
-      lastName: "Smith",
-      companyName: "Acme Contact Center",
-      contactNumber: "+1 212-555-0100",
-      role: "Operations Director",
-      callingLocation: "USA",
-      address: "123 Outbound Boulevard, Suite 400",
-      city: "New York",
-      state: "NY",
-      zipCode: "10001",
-      country: "United States",
-      teamsId: "john.smith@acme.com",
-      numberOfAgents: 50,
-      typeOfAgents: "Voice",
-      campaign: "Moving from legacy dialer to predictive",
-      dialDNC: "no",
-      additionalInfo: "Need custom caller ID routing",
-      termsAccepted: true,
-      createdAt: new Date(Date.now() - 86400000).toISOString()
-    },
-    {
-      _id: "674f1a2b3c4d5e6f7890klmn",
-      firstName: "Sarah",
-      lastName: "Johnson",
-      companyName: "TechSales Solutions",
-      contactNumber: "+1 415-555-0200",
-      role: "VP Outbound Sales",
-      callingLocation: "USA",
-      address: "456 Tech Park, Building A",
-      city: "San Francisco",
-      state: "CA",
-      zipCode: "94105",
-      country: "United States",
-      teamsId: "sarah.j@techsales.com",
-      numberOfAgents: 120,
-      typeOfAgents: "Bots",
-      campaign: "AI-powered outbound dialing for lead generation",
-      dialDNC: "yes",
-      additionalInfo: "Express written permission for DNC numbers",
-      termsAccepted: true,
-      createdAt: new Date(Date.now() - 172800000).toISOString()
-    },
-    {
-      _id: "674f1a2b3c4d5e6f7890opqr",
-      firstName: "Michael",
-      lastName: "Chen",
-      companyName: "Global Connect Inc",
-      contactNumber: "+1 312-555-0300",
-      role: "CTO",
-      callingLocation: "Canada",
-      address: "789 Bay Street, Floor 12",
-      city: "Toronto",
-      state: "ON",
-      zipCode: "M5J 2W8",
-      country: "Canada",
-      teamsId: "m.chen@globalconnect.ca",
-      numberOfAgents: 200,
-      typeOfAgents: "Voice",
-      campaign: "International dialing expansion",
-      dialDNC: "no",
-      additionalInfo: "Need SIP trunk redundancy",
-      termsAccepted: true,
-      createdAt: new Date(Date.now() - 259200000).toISOString()
-    }
-  ]);
+  const [submissions, setSubmissions] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [fetchError, setFetchError] = useState<string | null>(null);
