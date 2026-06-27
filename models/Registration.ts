@@ -3,17 +3,16 @@ import mongoose, { Document, Schema } from "mongoose";
 export interface IRegistration extends Document {
   firstName: string;
   lastName: string;
+  email: string;
   companyName: string;
   companyRegistrationNo?: string;
   contactNumber: string;
   role: string;
-  callingLocation: "USA" | "Canada";
   address: string;
   city: string;
   state: string;
   zipCode: string;
   country: string;
-  teamsId: string;
   numberOfAgents: number;
   typeOfAgents: "Voice" | "Bots";
   campaign: string;
@@ -27,17 +26,16 @@ const RegistrationSchema = new Schema<IRegistration>(
   {
     firstName: { type: String, required: true, trim: true },
     lastName: { type: String, required: true, trim: true },
+    email: { type: String, required: true, trim: true, lowercase: true },
     companyName: { type: String, required: true, trim: true },
     companyRegistrationNo: { type: String, trim: true },
     contactNumber: { type: String, required: true, trim: true },
     role: { type: String, required: true, trim: true },
-    callingLocation: { type: String, enum: ["USA", "Canada"], required: true },
     address: { type: String, required: true, trim: true },
     city: { type: String, required: true, trim: true },
     state: { type: String, required: true, trim: true },
     zipCode: { type: String, required: true, trim: true },
     country: { type: String, required: true, trim: true },
-    teamsId: { type: String, required: true, trim: true },
     numberOfAgents: { type: Number, required: true },
     typeOfAgents: { type: String, enum: ["Voice", "Bots"], required: true },
     campaign: { type: String, required: true, trim: true },

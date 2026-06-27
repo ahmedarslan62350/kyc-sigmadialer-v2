@@ -136,7 +136,7 @@ export default function AdminPanel({ refreshTrigger, theme = "light" }: AdminPan
                   <th className="py-4.5 px-6">Company</th>
                   <th className="py-4.5 px-6">Representative</th>
                   <th className="py-4.5 px-6">Agents & Type</th>
-                  <th className="py-4.5 px-6">Call Region</th>
+                  <th className="py-4.5 px-6">Location</th>
                   <th className="py-4.5 px-6">DNC Dial</th>
                   <th className="py-4.5 px-6">Created At</th>
                 </tr>
@@ -173,8 +173,8 @@ export default function AdminPanel({ refreshTrigger, theme = "light" }: AdminPan
                           <div className={`text-xs font-mono mt-0.5 ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
                             {sub.role} | {sub.contactNumber}
                           </div>
-                          <div className={`text-[10px] font-mono mt-0.5 ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>
-                            ID: {sub.teamsId}
+                          <div className={`text-[10px] font-mono mt-0.5 truncate max-w-[160px] ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>
+                            {sub.email}
                           </div>
                         </div>
                       </td>
@@ -201,14 +201,11 @@ export default function AdminPanel({ refreshTrigger, theme = "light" }: AdminPan
                       {/* Location */}
                       <td className="py-4 px-6">
                         <div>
-                          <div className="flex items-center gap-1">
-                            <span className="text-xs">
-                              {sub.callingLocation === "USA" ? "🇺🇸" : "🇨🇦"}
-                            </span>
-                            <span className={`font-semibold ${isDark ? "text-zinc-300" : "text-zinc-700"}`}>{sub.callingLocation}</span>
+                          <div className={`font-semibold ${isDark ? "text-zinc-300" : "text-zinc-700"}`}>
+                            {sub.city}, {sub.state}
                           </div>
                           <div className={`text-[10px] mt-0.5 truncate max-w-[150px] ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>
-                            {sub.city}, {sub.state}
+                            {sub.country}
                           </div>
                         </div>
                       </td>

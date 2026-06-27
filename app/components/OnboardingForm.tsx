@@ -53,10 +53,6 @@ export default function OnboardingForm({ onSuccess, theme }: OnboardingFormProps
         const data = await getIp();
 
         if (data?.country_name) setValue("country", data.country_name);
-        if (data?.city) setValue("city", data.city);
-        if (data?.region) setValue("state", data.region);
-        if (data?.postal) setValue("zipCode", data.postal);
-
         if (data?.country_calling_code) {
           setValue("contactNumber", `${data.country_calling_code} `);
         }
@@ -155,12 +151,9 @@ export default function OnboardingForm({ onSuccess, theme }: OnboardingFormProps
       className={`max-w-4xl mx-auto pb-16 ${isDark ? "text-white" : "text-zinc-900"}`}
       noValidate
     >
-      <h2 className={`text-xl font-bold mb-1 ${isDark ? "text-white" : "text-zinc-900"}`}>
+      <h2 className={`text-4xl mx-auto font-extrabold mb-10 w-fit ${isDark ? "text-white" : "text-zinc-900"}`}>
         Talk to the Team
       </h2>
-      <p className={`text-sm mb-6 ${isDark ? "text-zinc-400" : "text-zinc-500"}`}>
-        Fill out the form below and we'll get back to you.
-      </p>
 
       {serverError && (
         <motion.div
@@ -238,11 +231,6 @@ export default function OnboardingForm({ onSuccess, theme }: OnboardingFormProps
             placeholder="+1 555-0199"
             className={inputClass(!!validationErrors.contactNumber)}
           />
-          <p className={`text-xs mt-1 ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>
-            {ipStatus === "loading" && "Detecting your country code..."}
-            {ipStatus === "detected" && "Country code auto-filled based on your location."}
-            {ipStatus === "failed" && "Could not auto-detect location. Defaulted to +1."}
-          </p>
           {validationErrors.contactNumber && (
             <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.contactNumber}</p>
           )}
@@ -376,7 +364,7 @@ export default function OnboardingForm({ onSuccess, theme }: OnboardingFormProps
             type="text"
             id="role"
             name="role"
-            placeholder="e.g. Operations Director, VP Outbound Sales"
+            placeholder="e.g. Chief executive"
             className={inputClass(!!validationErrors.role)}
           />
           {validationErrors.role && (
@@ -435,7 +423,7 @@ export default function OnboardingForm({ onSuccess, theme }: OnboardingFormProps
             type="text"
             id="campaign"
             name="campaign"
-            placeholder="We're moving off [legacy] and need predictive dialing..."
+            placeholder="Enter your campaign name"
             className={inputClass(!!validationErrors.campaign)}
           />
           {validationErrors.campaign && (
@@ -480,7 +468,7 @@ export default function OnboardingForm({ onSuccess, theme }: OnboardingFormProps
             id="additionalInfo"
             name="additionalInfo"
             rows={3}
-            placeholder="Provide any custom dial routing specifications, caller ID requests, or IP addresses to whitelist."
+            placeholder=""
             className={`${inputClass(false)} resize-none`}
           ></textarea>
           {validationErrors.additionalInfo && (
@@ -533,7 +521,7 @@ export default function OnboardingForm({ onSuccess, theme }: OnboardingFormProps
             <span>Submitting...</span>
           </>
         ) : (
-          <span>Send message</span>
+          <span>Complete Signup</span>
         )}
       </button>
     </form>
