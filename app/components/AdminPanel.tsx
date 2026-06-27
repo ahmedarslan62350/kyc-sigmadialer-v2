@@ -173,7 +173,7 @@ export default function AdminPanel({ refreshTrigger, theme = "light" }: AdminPan
                           <div className={`text-xs font-mono mt-0.5 ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
                             {sub.role} | {sub.contactNumber}
                           </div>
-                          <div className={`text-[10px] font-mono mt-0.5 truncate max-w-[160px] ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>
+                          <div className={`text-[10px] font-mono mt-0.5 max-w-[160px] ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>
                             {sub.email}
                           </div>
                         </div>
