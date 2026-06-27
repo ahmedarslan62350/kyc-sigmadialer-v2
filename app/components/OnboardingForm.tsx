@@ -23,17 +23,16 @@ export default function OnboardingForm({ onSuccess, theme }: OnboardingFormProps
     defaultValues: {
       firstName: "",
       lastName: "",
+      email: "",
+      contactNumber: "",
       companyName: "",
       companyRegistrationNo: "",
-      contactNumber: "",
-      role: "",
-      callingLocation: "USA",
       address: "",
       city: "",
       state: "",
       zipCode: "",
       country: "United States",
-      teamsId: "",
+      role: "",
       numberOfAgents: 1,
       typeOfAgents: "Voice",
       campaign: "",
@@ -45,9 +44,8 @@ export default function OnboardingForm({ onSuccess, theme }: OnboardingFormProps
 
   const typeOfAgents = watch("typeOfAgents");
   const dialDNC = watch("dialDNC");
-  const callingLocation = watch("callingLocation");
 
-  // IP-based auto-detection. getIp() is implemented later in @/lib/getIp.
+  // IP-based auto-detection. getIp() is implemented in @/lib/getIp.
   useEffect(() => {
     async function autoDetectGeoIP() {
       setIpStatus("loading");
@@ -55,15 +53,12 @@ export default function OnboardingForm({ onSuccess, theme }: OnboardingFormProps
         const data = await getIp();
 
         if (data?.country_name) setValue("country", data.country_name);
+        if (data?.city) setValue("city", data.city);
+        if (data?.region) setValue("state", data.region);
+        if (data?.postal) setValue("zipCode", data.postal);
 
         if (data?.country_calling_code) {
           setValue("contactNumber", `${data.country_calling_code} `);
-        }
-
-        if (data?.country_code === "CA") {
-          setValue("callingLocation", "Canada");
-        } else {
-          setValue("callingLocation", "USA");
         }
 
         setIpStatus("detected");
@@ -71,7 +66,6 @@ export default function OnboardingForm({ onSuccess, theme }: OnboardingFormProps
         console.warn("GeoIP lookup failed. Defaulting to standard region US:", err);
         setIpStatus("failed");
         setValue("country", "United States");
-        setValue("callingLocation", "USA");
         setValue("contactNumber", "+1 ");
       }
     }
@@ -139,21 +133,21 @@ export default function OnboardingForm({ onSuccess, theme }: OnboardingFormProps
     }
   };
 
-  const labelClass = `block text-sm font-medium mb-1 ${isDark ? "text-zinc-200" : "text-zinc-800"}`;
+  const labelClass = `block text-sm font-semibold mb-1.5 ${isDark ? "text-zinc-100" : "text-zinc-900"}`;
   const inputClass = (hasError: boolean) =>
-    `w-full text-sm rounded-md px-3 py-2 outline-none font-sans transition-colors border ${
+    `w-full text-base rounded-md px-4 py-3 outline-none font-sans transition-colors border-2 ${
       isDark
-        ? `bg-[#0e0f14] text-white placeholder-zinc-600 focus:border-zinc-400 ${
-            hasError ? "border-rose-700" : "border-zinc-700"
+        ? `bg-[#101114] text-white placeholder-zinc-500 focus:border-white ${
+            hasError ? "border-rose-600" : "border-zinc-600"
           }`
-        : `bg-white text-zinc-900 placeholder-zinc-400 focus:border-zinc-500 ${
-            hasError ? "border-rose-400" : "border-zinc-300"
+        : `bg-white text-zinc-950 placeholder-zinc-400 focus:border-zinc-900 ${
+            hasError ? "border-rose-500" : "border-zinc-400"
           }`
     }`;
   const errorTextClass = "text-xs text-rose-500 mt-1 flex items-center gap-1";
   const fieldWrapClass = "w-full";
-  const rowClass = "grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5";
-  const fullRowClass = "grid grid-cols-1 gap-4 mb-5";
+  const rowClass = "grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6";
+  const fullRowClass = "grid grid-cols-1 gap-5 mb-6";
 
   return (
     <form
@@ -217,45 +211,25 @@ export default function OnboardingForm({ onSuccess, theme }: OnboardingFormProps
         </div>
       </div>
 
-      {/* Company Name */}
-      <div className={fullRowClass}>
-      <div className={fieldWrapClass}>
-        <label htmlFor="companyName" className={labelClass}>Company Name</label>
-        <input
-          {...register("companyName")}
-          type="text"
-          id="companyName"
-          name="companyName"
-          placeholder="Acme Contact Center"
-          className={inputClass(!!validationErrors.companyName)}
-        />
-        {validationErrors.companyName && (
-          <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.companyName}</p>
-        )}
-      </div>
-      </div>
-
-      {/* Company Registration No (optional) + Contact Number */}
+      {/* Email + Phone No */}
       <div className={rowClass}>
         <div className={fieldWrapClass}>
-          <label htmlFor="companyRegistrationNo" className={labelClass}>
-            Company Registration No <span className={isDark ? "text-zinc-500" : "text-zinc-400"}>(Optional)</span>
-          </label>
+          <label htmlFor="email" className={labelClass}>Email</label>
           <input
-            {...register("companyRegistrationNo")}
-            type="text"
-            id="companyRegistrationNo"
-            name="companyRegistrationNo"
-            placeholder="e.g. US-898239-BC"
-            className={inputClass(!!validationErrors.companyRegistrationNo)}
+            {...register("email")}
+            type="email"
+            id="email"
+            name="email"
+            placeholder="jane@acme.com"
+            className={inputClass(!!validationErrors.email)}
           />
-          {validationErrors.companyRegistrationNo && (
-            <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.companyRegistrationNo}</p>
+          {validationErrors.email && (
+            <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.email}</p>
           )}
         </div>
 
         <div className={fieldWrapClass}>
-          <label htmlFor="contactNumber" className={labelClass}>Contact Number</label>
+          <label htmlFor="contactNumber" className={labelClass}>Phone No</label>
           <input
             {...register("contactNumber")}
             type="tel"
@@ -275,258 +249,244 @@ export default function OnboardingForm({ onSuccess, theme }: OnboardingFormProps
         </div>
       </div>
 
-      {/* Your Role in Business */}
-      <div className={fullRowClass}>
-      <div className={fieldWrapClass}>
-        <label htmlFor="role" className={labelClass}>Your Role in Business</label>
-        <input
-          {...register("role")}
-          type="text"
-          id="role"
-          name="role"
-          placeholder="e.g. Operations Director, VP Outbound Sales"
-          className={inputClass(!!validationErrors.role)}
-        />
-        {validationErrors.role && (
-          <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.role}</p>
-        )}
-      </div>
-      </div>
-
-      {/* Where are you calling: USA/Canada */}
-      <div className={fullRowClass}>
-      <div className={fieldWrapClass}>
-        <label className={labelClass}>Where are you calling?</label>
-        <div className="flex gap-3">
-          <label className="flex items-center gap-2 text-sm cursor-pointer">
-            <input
-              type="radio"
-              checked={callingLocation === "USA"}
-              onChange={() => setValue("callingLocation", "USA")}
-            />
-            USA
-          </label>
-          <label className="flex items-center gap-2 text-sm cursor-pointer">
-            <input
-              type="radio"
-              checked={callingLocation === "Canada"}
-              onChange={() => setValue("callingLocation", "Canada")}
-            />
-            Canada
-          </label>
+      {/* Company Name + Company Registration No */}
+      <div className={rowClass}>
+        <div className={fieldWrapClass}>
+          <label htmlFor="companyName" className={labelClass}>Company Name</label>
+          <input
+            {...register("companyName")}
+            type="text"
+            id="companyName"
+            name="companyName"
+            placeholder="Acme Contact Center"
+            className={inputClass(!!validationErrors.companyName)}
+          />
+          {validationErrors.companyName && (
+            <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.companyName}</p>
+          )}
         </div>
-      </div>
+
+        <div className={fieldWrapClass}>
+          <label htmlFor="companyRegistrationNo" className={labelClass}>
+            Company Registration No <span className={isDark ? "text-zinc-500" : "text-zinc-400"}>(Optional)</span>
+          </label>
+          <input
+            {...register("companyRegistrationNo")}
+            type="text"
+            id="companyRegistrationNo"
+            name="companyRegistrationNo"
+            placeholder="e.g. US-898239-BC"
+            className={inputClass(!!validationErrors.companyRegistrationNo)}
+          />
+          {validationErrors.companyRegistrationNo && (
+            <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.companyRegistrationNo}</p>
+          )}
+        </div>
       </div>
 
       {/* Address */}
       <div className={fullRowClass}>
-      <div className={fieldWrapClass}>
-        <label htmlFor="address" className={labelClass}>Address</label>
-        <input
-          {...register("address")}
-          type="text"
-          id="address"
-          name="address"
-          placeholder="123 Outbound Boulevard, Suite 400"
-          className={inputClass(!!validationErrors.address)}
-        />
-        {validationErrors.address && (
-          <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.address}</p>
-        )}
-      </div>
+        <div className={fieldWrapClass}>
+          <label htmlFor="address" className={labelClass}>Address</label>
+          <input
+            {...register("address")}
+            type="text"
+            id="address"
+            name="address"
+            placeholder="123 Outbound Boulevard, Suite 400"
+            className={inputClass(!!validationErrors.address)}
+          />
+          {validationErrors.address && (
+            <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.address}</p>
+          )}
+        </div>
       </div>
 
       {/* City + State */}
       <div className={rowClass}>
         <div className={fieldWrapClass}>
-        <label htmlFor="city" className={labelClass}>City</label>
-        <input
-          {...register("city")}
-          type="text"
-          id="city"
-          name="city"
-          placeholder="New York"
-          className={inputClass(!!validationErrors.city)}
-        />
-        {validationErrors.city && (
-          <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.city}</p>
-        )}
+          <label htmlFor="city" className={labelClass}>City</label>
+          <input
+            {...register("city")}
+            type="text"
+            id="city"
+            name="city"
+            placeholder="New York"
+            className={inputClass(!!validationErrors.city)}
+          />
+          {validationErrors.city && (
+            <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.city}</p>
+          )}
         </div>
 
         <div className={fieldWrapClass}>
-        <label htmlFor="state" className={labelClass}>State</label>
-        <input
-          {...register("state")}
-          type="text"
-          id="state"
-          name="state"
-          placeholder="NY"
-          className={inputClass(!!validationErrors.state)}
-        />
-        {validationErrors.state && (
-          <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> Required</p>
-        )}
+          <label htmlFor="state" className={labelClass}>State</label>
+          <input
+            {...register("state")}
+            type="text"
+            id="state"
+            name="state"
+            placeholder="NY"
+            className={inputClass(!!validationErrors.state)}
+          />
+          {validationErrors.state && (
+            <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> Required</p>
+          )}
         </div>
       </div>
 
       {/* Zip Code + Country */}
       <div className={rowClass}>
         <div className={fieldWrapClass}>
-        <label htmlFor="zipCode" className={labelClass}>Zip Code</label>
-        <input
-          {...register("zipCode")}
-          type="text"
-          id="zipCode"
-          name="zipCode"
-          placeholder="10001"
-          className={inputClass(!!validationErrors.zipCode)}
-        />
-        {validationErrors.zipCode && (
-          <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> Required</p>
-        )}
+          <label htmlFor="zipCode" className={labelClass}>Zip Code</label>
+          <input
+            {...register("zipCode")}
+            type="text"
+            id="zipCode"
+            name="zipCode"
+            placeholder="10001"
+            className={inputClass(!!validationErrors.zipCode)}
+          />
+          {validationErrors.zipCode && (
+            <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> Required</p>
+          )}
         </div>
 
         <div className={fieldWrapClass}>
-        <label htmlFor="country" className={labelClass}>Country</label>
-        <input
-          {...register("country")}
-          type="text"
-          id="country"
-          name="country"
-          className={inputClass(!!validationErrors.country)}
-        />
-        {validationErrors.country && (
-          <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.country}</p>
-        )}
+          <label htmlFor="country" className={labelClass}>Country</label>
+          <input
+            {...register("country")}
+            type="text"
+            id="country"
+            name="country"
+            className={inputClass(!!validationErrors.country)}
+          />
+          {validationErrors.country && (
+            <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.country}</p>
+          )}
         </div>
       </div>
 
-      {/* Teams ID */}
+      {/* Your Designation */}
       <div className={fullRowClass}>
-      <div className={fieldWrapClass}>
-        <label htmlFor="teamsId" className={labelClass}>Teams ID</label>
-        <input
-          {...register("teamsId")}
-          type="text"
-          id="teamsId"
-          name="teamsId"
-          placeholder="e.g. jane@acme.com or Sales-East"
-          className={inputClass(!!validationErrors.teamsId)}
-        />
-        <p className={`text-xs mt-1 ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>
-          Unique workspace or company group identification ID.
-        </p>
-        {validationErrors.teamsId && (
-          <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.teamsId}</p>
-        )}
-      </div>
+        <div className={fieldWrapClass}>
+          <label htmlFor="role" className={labelClass}>Your Designation</label>
+          <input
+            {...register("role")}
+            type="text"
+            id="role"
+            name="role"
+            placeholder="e.g. Operations Director, VP Outbound Sales"
+            className={inputClass(!!validationErrors.role)}
+          />
+          {validationErrors.role && (
+            <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.role}</p>
+          )}
+        </div>
       </div>
 
       {/* Number of agents + Type of Agents */}
       <div className={rowClass}>
         <div className={fieldWrapClass}>
-        <label htmlFor="numberOfAgents" className={labelClass}>Number of Agents</label>
-        <input
-          {...register("numberOfAgents")}
-          type="number"
-          id="numberOfAgents"
-          name="numberOfAgents"
-          min="1"
-          max="10000"
-          className={inputClass(!!validationErrors.numberOfAgents)}
-        />
-        {validationErrors.numberOfAgents && (
-          <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.numberOfAgents}</p>
-        )}
+          <label htmlFor="numberOfAgents" className={labelClass}>Number of Agents</label>
+          <input
+            {...register("numberOfAgents")}
+            type="number"
+            id="numberOfAgents"
+            name="numberOfAgents"
+            min="1"
+            max="10000"
+            className={inputClass(!!validationErrors.numberOfAgents)}
+          />
+          {validationErrors.numberOfAgents && (
+            <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.numberOfAgents}</p>
+          )}
         </div>
 
         <div className={fieldWrapClass}>
-        <label className={labelClass}>Type of Agents</label>
-        <div className="flex gap-3 h-[38px] items-center">
-          <label className="flex items-center gap-2 text-sm cursor-pointer">
-            <input
-              type="radio"
-              checked={typeOfAgents === "Voice"}
-              onChange={() => setValue("typeOfAgents", "Voice")}
-            />
-            Voice
-          </label>
-          <label className="flex items-center gap-2 text-sm cursor-pointer">
-            <input
-              type="radio"
-              checked={typeOfAgents === "Bots"}
-              onChange={() => setValue("typeOfAgents", "Bots")}
-            />
-            AI Bots
-          </label>
-        </div>
+          <label className={labelClass}>Type of Agents</label>
+          <div className="flex gap-4 h-[46px] items-center">
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="radio"
+                checked={typeOfAgents === "Voice"}
+                onChange={() => setValue("typeOfAgents", "Voice")}
+              />
+              Voice
+            </label>
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="radio"
+                checked={typeOfAgents === "Bots"}
+                onChange={() => setValue("typeOfAgents", "Bots")}
+              />
+              AI Bots
+            </label>
+          </div>
         </div>
       </div>
 
-      {/* Campaign */}
-      <div className={fullRowClass}>
-      <div className={fieldWrapClass}>
-        <label htmlFor="campaign" className={labelClass}>Campaign</label>
-        <input
-          {...register("campaign")}
-          type="text"
-          id="campaign"
-          name="campaign"
-          placeholder="We're moving off [legacy] and need predictive dialing..."
-          className={inputClass(!!validationErrors.campaign)}
-        />
-        {validationErrors.campaign && (
-          <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.campaign}</p>
-        )}
-      </div>
-      </div>
-
-      {/* Do you dial DNC? yes/no */}
-      <div className={fullRowClass}>
-      <div className={fieldWrapClass}>
-        <label className={labelClass}>Do you dial DNC numbers?</label>
-        <div className="flex gap-3">
-          <label className="flex items-center gap-2 text-sm cursor-pointer">
-            <input
-              type="radio"
-              checked={dialDNC === "yes"}
-              onChange={() => setValue("dialDNC", "yes")}
-            />
-            Yes
-          </label>
-          <label className="flex items-center gap-2 text-sm cursor-pointer">
-            <input
-              type="radio"
-              checked={dialDNC === "no"}
-              onChange={() => setValue("dialDNC", "no")}
-            />
-            No (Safe Scrub)
-          </label>
+      {/* Campaign + Do you dial DNC numbers? */}
+      <div className={rowClass}>
+        <div className={fieldWrapClass}>
+          <label htmlFor="campaign" className={labelClass}>Campaign</label>
+          <input
+            {...register("campaign")}
+            type="text"
+            id="campaign"
+            name="campaign"
+            placeholder="We're moving off [legacy] and need predictive dialing..."
+            className={inputClass(!!validationErrors.campaign)}
+          />
+          {validationErrors.campaign && (
+            <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.campaign}</p>
+          )}
         </div>
-        <p className={`text-xs mt-1 ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>
-          Do Not Call scrub list compliance flag.
-        </p>
-      </div>
+
+        <div className={fieldWrapClass}>
+          <label className={labelClass}>Do you dial DNC numbers?</label>
+          <div className="flex gap-4 h-[46px] items-center">
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="radio"
+                checked={dialDNC === "yes"}
+                onChange={() => setValue("dialDNC", "yes")}
+              />
+              Yes
+            </label>
+            <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="radio"
+                checked={dialDNC === "no"}
+                onChange={() => setValue("dialDNC", "no")}
+              />
+              No (Safe Scrub)
+            </label>
+          </div>
+          <p className={`text-xs mt-1 ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>
+            Do Not Call scrub list compliance flag.
+          </p>
+        </div>
       </div>
 
       {/* Additional Information (optional) */}
       <div className={fullRowClass}>
-      <div className={fieldWrapClass}>
-        <label htmlFor="additionalInfo" className={labelClass}>
-          Additional Information <span className={isDark ? "text-zinc-500" : "text-zinc-400"}>(Optional)</span>
-        </label>
-        <textarea
-          {...register("additionalInfo")}
-          id="additionalInfo"
-          name="additionalInfo"
-          rows={3}
-          placeholder="Provide any custom dial routing specifications, caller ID requests, or IP addresses to whitelist."
-          className={`${inputClass(false)} resize-none`}
-        ></textarea>
-        {validationErrors.additionalInfo && (
-          <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.additionalInfo}</p>
-        )}
-      </div>
+        <div className={fieldWrapClass}>
+          <label htmlFor="additionalInfo" className={labelClass}>
+            Additional Information <span className={isDark ? "text-zinc-500" : "text-zinc-400"}>(Optional)</span>
+          </label>
+          <textarea
+            {...register("additionalInfo")}
+            id="additionalInfo"
+            name="additionalInfo"
+            rows={3}
+            placeholder="Provide any custom dial routing specifications, caller ID requests, or IP addresses to whitelist."
+            className={`${inputClass(false)} resize-none`}
+          ></textarea>
+          {validationErrors.additionalInfo && (
+            <p className={errorTextClass}><AlertCircle className="w-3 h-3" /> {validationErrors.additionalInfo}</p>
+          )}
+        </div>
       </div>
 
       {/* Terms */}
