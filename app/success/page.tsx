@@ -12,7 +12,6 @@ import Footer from "../components/Footer";
 
 export default function SuccessPage() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [submittedRecord, setSubmittedRecord] = useState<any>(null);
   const [mousePos, setMousePos] = useState({ x: -200, y: -200 });
   const [isHovering, setIsHovering] = useState(false);
 
@@ -37,14 +36,6 @@ export default function SuccessPage() {
 
   const isDark = theme === "dark";
 
-  // Get submitted record from localStorage
-  useEffect(() => {
-    const savedRecord = localStorage.getItem("submittedRecord");
-    if (savedRecord) {
-      setSubmittedRecord(JSON.parse(savedRecord));
-    }
-  }, []);
-
   // Mouse follower effect
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -64,24 +55,6 @@ export default function SuccessPage() {
       window.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, []);
-
-  if (!submittedRecord) {
-    return (
-      <div className={`min-h-screen transition-colors duration-300 flex flex-col font-sans selection:bg-zinc-800 selection:text-white relative overflow-x-clip ${
-        isDark 
-          ? "bg-[#050507] bg-gradient-to-br from-[#181524] via-[#050507] to-[#081714] text-zinc-100 grid-bg-dark" 
-          : "bg-[#f8f9fc] bg-gradient-to-br from-[#f2f4ff] via-[#f8fafc] to-[#f0fdf9] text-zinc-900 grid-bg-light"
-      }`}>
-        <Header theme={theme} toggleTheme={toggleTheme} />
-        <main className="flex-grow max-w-6xl w-full mx-auto px-4 md:px-8 py-10 flex items-center justify-center">
-          <div className={`text-center ${isDark ? "text-zinc-400" : "text-zinc-600"}`}>
-            No submission record found. Please complete the onboarding form first.
-          </div>
-        </main>
-        <Footer theme={theme} />
-      </div>
-    );
-  }
 
   return (
     <div className={`min-h-screen transition-colors duration-300 flex flex-col font-sans selection:bg-zinc-800 selection:text-white relative overflow-x-clip ${
@@ -154,9 +127,6 @@ export default function SuccessPage() {
               </div>
               <div className="text-right shrink-0">
                 <span className={`text-[11px] font-mono block ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>Sync Identifier</span>
-                <span className={`font-mono font-bold text-xs border px-2 py-1 rounded ${
-                  isDark ? "text-zinc-300 bg-zinc-900 border-zinc-850" : "text-zinc-700 bg-zinc-100 border-zinc-200"
-                }`}>Ref: {submittedRecord._id}</span>
               </div>
             </div>
 

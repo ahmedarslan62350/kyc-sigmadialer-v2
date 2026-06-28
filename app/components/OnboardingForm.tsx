@@ -116,9 +116,6 @@ export default function OnboardingForm({ onSuccess, theme }: OnboardingFormProps
         }
       }
 
-      // Save submitted record to localStorage for success page
-      localStorage.setItem("submittedRecord", JSON.stringify(result.data));
-
       if (result.verification && result.verification.verification_url) {
         window.location.href = result.verification.verification_url;
       } else {
