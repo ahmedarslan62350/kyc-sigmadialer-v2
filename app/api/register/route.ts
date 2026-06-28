@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     const callbackUrl = `${appUrl}/success`;
     
     // Exclude agent-related fields from Didit session
-    const { numberOfAgents, typeOfAgents, ...sessionData } = validationResult.data;
+    const { typeOfAgents, ...sessionData } = validationResult.data;
     
     const diditSession = await createDiditSession(
       savedDoc._id.toString(),
