@@ -34,10 +34,13 @@ export async function POST(request: NextRequest) {
     const appUrl = process.env.APP_URL || "http://localhost:3000";
     const callbackUrl = `${appUrl}/success`;
     
+    // Exclude agent-related fields from Didit session
+    const { numberOfAgents, typeOfAgents, ...sessionData } = validationResult.data;
+    
     const diditSession = await createDiditSession(
       savedDoc._id.toString(),
       callbackUrl,
-      validationResult.data
+      sessionData
     );
 
     if (!diditSession.success) {
