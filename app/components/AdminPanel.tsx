@@ -130,7 +130,7 @@ export default function AdminPanel({ refreshTrigger, theme = "light" }: AdminPan
           <div className="overflow-x-auto font-sans">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className={`border-b text-[11px] font-mono font-bold uppercase ${
+                <tr className={`border-b text-[11px] font-mono font-bold uppercase my-1 ${
                   isDark ? "border-zinc-900 text-zinc-500 bg-zinc-950" : "border-zinc-100 text-zinc-400 bg-[#f8fafc]"
                 }`}>
                   <th className="py-4.5 px-6">Company</th>
