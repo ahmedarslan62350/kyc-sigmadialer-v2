@@ -131,14 +131,11 @@ export default function OnboardingForm({ onSuccess, theme }: OnboardingFormProps
 
   const labelClass = `block text-sm font-semibold mb-1.5 ${isDark ? "text-zinc-100" : "text-zinc-900"}`;
   const inputClass = (hasError: boolean) =>
-    `w-full text-base rounded-md px-4 py-3 outline-none font-sans transition-colors border-2 ${
-      isDark
-        ? `bg-[#101114] text-white placeholder-zinc-500 focus:border-white ${
-            hasError ? "border-rose-600" : "border-zinc-600"
-          }`
-        : `bg-white text-zinc-950 placeholder-zinc-400 focus:border-zinc-900 ${
-            hasError ? "border-rose-500" : "border-zinc-400"
-          }`
+    `w-full text-base rounded-md px-4 py-3 outline-none font-sans transition-colors border-2 ${isDark
+      ? `bg-[#101114] text-white placeholder-zinc-500 focus:border-white ${hasError ? "border-rose-600" : "border-zinc-600"
+      }`
+      : `bg-white text-zinc-950 placeholder-zinc-400 focus:border-zinc-900 ${hasError ? "border-rose-500" : "border-zinc-400"
+      }`
     }`;
   const errorTextClass = "text-xs text-rose-500 mt-1 flex items-center gap-1";
   const fieldWrapClass = "w-full";
@@ -151,17 +148,17 @@ export default function OnboardingForm({ onSuccess, theme }: OnboardingFormProps
       className={`max-w-4xl mx-auto pb-16 ${isDark ? "text-white" : "text-zinc-900"}`}
       noValidate
     >
-      <h2 className={`text-4xl mx-auto font-extrabold mb-10 w-fit ${isDark ? "text-white" : "text-zinc-900"}`}>
-        Talk to the Team
+      <h2 className={`text-4xl mx-auto font-extrabold mb-2 w-fit ${isDark ? "text-white" : "text-zinc-900"}`}>
+        Let’s Map This to your Floor
       </h2>
+      <p className={`mx-auto w-fit text-xl font-semibold mb-10 ${isDark ? "text-zinc-500" : "text-zinc-400"}`}>Enter the required details below.</p>
 
       {serverError && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`p-3 border rounded-md mb-6 text-sm flex items-start gap-2 ${
-            isDark ? "bg-rose-950/20 border-rose-900 text-rose-400" : "bg-rose-50 border-rose-200 text-rose-700"
-          }`}
+          className={`p-3 border rounded-md mb-6 text-sm flex items-start gap-2 ${isDark ? "bg-rose-950/20 border-rose-900 text-rose-400" : "bg-rose-50 border-rose-200 text-rose-700"
+            }`}
         >
           <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
           <div>
@@ -511,9 +508,8 @@ export default function OnboardingForm({ onSuccess, theme }: OnboardingFormProps
       <button
         type="submit"
         disabled={loading}
-        className={`w-full px-6 py-3 text-sm font-bold rounded-md transition-colors disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2 ${
-          isDark ? "bg-white hover:bg-zinc-100 text-black" : "bg-zinc-900 hover:bg-zinc-800 text-white"
-        }`}
+        className={`w-full px-6 py-3 text-sm font-bold rounded-md transition-colors disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2 ${isDark ? "bg-white hover:bg-zinc-100 text-black" : "bg-zinc-900 hover:bg-zinc-800 text-white"
+          }`}
       >
         {loading ? (
           <>
